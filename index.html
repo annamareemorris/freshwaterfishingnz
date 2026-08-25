@@ -136,31 +136,52 @@
     position:relative; width:100%; aspect-ratio:603/1311;
     border-radius:37px; overflow:hidden; background:var(--deep);
   }
-  /* Two screens per phone, cross-fading. The first sits underneath and is
-     always painted; the second fades in over it and back out.
-     The second phone runs a QUARTER cycle behind — half a cycle would put both
-     transitions on the same beat, just in opposite directions. */
   .device .screen img{
     position:absolute; inset:0; width:100%; height:100%;
-    object-fit:cover; display:block;
+    object-fit:cover; display:block; opacity:0;
   }
-  .device .screen img + img{animation:xfade 14s ease-in-out infinite}
-  .shot:nth-child(2) .screen img + img{animation-delay:-3.5s}
+
+  /* Each phone cycles its own stack. The two run on different periods —
+     5.5s a screen on the left, 7s on the right — so they drift instead of
+     changing on the same beat. */
+  .shot:nth-child(1) .screen img{animation:cycle4 22s linear infinite}
+  .shot:nth-child(1) .screen img:nth-child(1){animation-delay:0s}
+  .shot:nth-child(1) .screen img:nth-child(2){animation-delay:-16.5s}
+  .shot:nth-child(1) .screen img:nth-child(3){animation-delay:-11s}
+  .shot:nth-child(1) .screen img:nth-child(4){animation-delay:-5.5s}
+
+  .shot:nth-child(2) .screen img{animation:cycle3 21s linear infinite}
+  .shot:nth-child(2) .screen img:nth-child(1){animation-delay:-3.5s}
+  .shot:nth-child(2) .screen img:nth-child(2){animation-delay:-17.5s}
+  .shot:nth-child(2) .screen img:nth-child(3){animation-delay:-10.5s}
+
   .shot figcaption{margin-top:18px;color:var(--dimmer);font-size:12.5px;max-width:24em;line-height:1.45}
   .shot figcaption b{display:block;color:var(--ink);font-size:13.5px;font-weight:600;margin-bottom:3px}
+
   @keyframes float{
     0%,100%{transform:translateY(0)}
     50%    {transform:translateY(-10px)}
   }
-  @keyframes xfade{
-    0%, 42%   {opacity:0}
-    50%, 92%  {opacity:1}
-    100%      {opacity:0}
+  /* Hold, fade out, wait its turn, fade back in. */
+  @keyframes cycle4{
+    0%    {opacity:1}
+    21%   {opacity:1}
+    25%   {opacity:0}
+    96%   {opacity:0}
+    100%  {opacity:1}
+  }
+  @keyframes cycle3{
+    0%      {opacity:1}
+    28.3%   {opacity:1}
+    33.3%   {opacity:0}
+    95%     {opacity:0}
+    100%    {opacity:1}
   }
   @media (max-width:560px){ .screens{gap:38px} }
   @media (prefers-reduced-motion:reduce){
     .device{animation:none}
-    .device .screen img + img{animation:none; opacity:0}
+    .device .screen img{animation:none; opacity:0}
+    .device .screen img:first-child{opacity:1}
   }
 
   /* ---------- free promise ---------- */
@@ -337,18 +358,21 @@
     <div class="screens">
       <figure class="shot">
         <div class="device"><div class="screen">
+          <img src="screen-mataura.jpg" width="603" height="1311" decoding="async" alt="The lower Mataura at Seaward Downs / Mataura Island: 90.2 cumecs, holding steady, open all year, with a green banner reading &quot;Prime &#8212; get out there&quot; and an explanation that for August the river is at or below this level about 5 days in 10.">
           <img src="screen-hawea.jpg" width="540" height="1174" loading="lazy" decoding="async" alt="The H&#257;wea River screen: 189.5 cumecs, holding steady, flagged &quot;Blown out &#8212; too high and coloured to fish well&quot;, with brown and rainbow trout listed and a 14-day flow chart below.">
           <img src="screen-waikaia.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The Waikaia River at Piano Flat: a live Environment Southland river camera showing a frosty morning, an access map, and a fourteen-day flow chart ranging 6.0 to 110.2 cumecs against an annual median of 8.4.">
+          <img src="screen-dunstan.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="Lake Dunstan at Cromwell reading 194.20 m and dropping, marked Open all year with good conditions, and the advice: light north-west wind 11 km/h, work the edges, drop-offs and stream mouths.">
         </div></div>
-        <figcaption><b>Is it worth going?</b>The verdict puts today&#8217;s flow on this river&#8217;s own long-term curve &#8212; then gives you the last fortnight and a live camera to check it against.</figcaption>
+        <figcaption><b>Is it worth going?</b>A plain-English verdict for every gauged water &#8212; rivers placed against their own long-term record, lakes read from the wind.</figcaption>
       </figure>
 
       <figure class="shot">
         <div class="device"><div class="screen">
-          <img src="screen-dunstan.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="Lake Dunstan at Cromwell reading 194.20 m and dropping, marked Open all year with good conditions, and the advice: light north-west wind 11 km/h, work the edges, drop-offs and stream mouths.">
+          <img src="screen-alerts-best.jpg" width="603" height="1311" decoding="async" alt="Fishing-window alerts with a notify toggle for Seaward Downs / Mataura Island, a Best waters near you card with a 105 km search distance and a &quot;Show my 5 best waters&quot; link, and an On the water now card reading &quot;No hatch on yet &#8212; search a #20 Midge pupa&quot;.">
+          <img src="screen-reference.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The reference section: a Fish of the Rivers field guide card showing a brown trout, then How to fly fish, How to spin fish, How to bait fish, Knots tippet and leaders, and Catch and release.">
           <img src="screen-splash.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The app&#8217;s opening screen: the title Freshwater Fishing New Zealand over a turquoise back-country river.">
         </div></div>
-        <figcaption><b>Rivers, lakes and dams</b>Every named water in Southland and Otago &#8212; with stillwater read from wind, light and season rather than flow.</figcaption>
+        <figcaption><b>And when it is</b>Alerts when your river comes right, the five best waters within your range, what&#8217;s hatching now &#8212; and a field guide to the fish, the methods and the knots.</figcaption>
       </figure>
     </div>
   </div>
