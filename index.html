@@ -1,231 +1,470 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-NZ">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Freshwater Fishing NZ — Coming 1 September</title>
-<meta name="description" content="Know where to fish, when to go, and what to tie on — across the South Island. A freshwater fishing companion starting with Southland and Otago. Coming 1 September.">
-<meta property="og:title" content="Freshwater Fishing NZ — Coming 1 September">
-<meta property="og:description" content="Live river conditions, real hatch science, and the rules — for South Island freshwater anglers.">
-<meta property="og:image" content="caples-river-web.jpg">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Freshwater Fishing NZ — live flow, fishability and the hatch</title>
+<meta name="description" content="Reads every river and lake in Southland and Otago in real time and tells you, in plain English, whether it's worth going today. Regulations, access maps and safety are free. iPhone.">
+
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Freshwater Fishing NZ">
+<meta property="og:description" content="Live flow, fishability and the hatch — across Southland &amp; Otago.">
+<meta property="og:image" content="https://www.freshwaterfishingnz.com/assets/og-card.jpg">
+<meta property="og:url" content="https://www.freshwaterfishingnz.com/">
+<meta name="twitter:card" content="summary_large_image">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap">
+
 <style>
-  :root{ --ink:#f5fafc; --dim:rgba(235,245,248,.82); --dimmer:rgba(235,245,248,.6); }
+  :root{
+    --deep:#0a2430;
+    --deeper:#061a24;
+    --panel:rgba(8,30,40,.55);
+    --line:rgba(255,255,255,.14);
+    --ink:#f5fafc;
+    --dim:rgba(235,245,248,.82);
+    --dimmer:rgba(235,245,248,.6);
+    --accent:#4fd1e0;
+    --accent-deep:#1d8f9e;
+  }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%}
+  html{scroll-behavior:smooth}
   body{
-    background:#0a2430;
+    background:var(--deep);
     color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    display:flex; flex-direction:column; align-items:center;
-    text-align:center; line-height:1.5; padding:0 22px;
+    line-height:1.55; text-align:center;
+    -webkit-font-smoothing:antialiased;
   }
-  /* Photo pinned as a fixed full-viewport layer so it can never run out —
-     content scrolls over it (reliable on iOS where fixed backgrounds fail).
-     Dimming gradient layered on top so the type carries, like the app splash. */
-  body::before{
-    content:""; position:fixed; inset:0; z-index:-1;
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  a{color:var(--accent)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative; overflow:hidden; padding:64px 0 72px}
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:0;
     background:
-      linear-gradient(rgba(6,26,36,.45), rgba(6,26,36,.55)),
+      linear-gradient(rgba(6,26,36,.42), rgba(6,26,36,.72) 70%, var(--deep)),
       url("caples-river-web.jpg") center 35% / cover no-repeat;
   }
-  main, footer{position:relative; z-index:1}
-  main{flex:1; display:flex; flex-direction:column; justify-content:center;
-       align-items:center; max-width:1040px; padding:56px 0 32px}
+  .hero > *{position:relative; z-index:1}
 
-  /* Two-column on wide screens: words on the left, the app on the right.
-     Stacks back to a single centred column on phones. */
-  .split{
-    display:flex; flex-direction:column; align-items:center; gap:38px; width:100%;
+  .appicon{
+    position:relative; width:150px; height:150px; overflow:hidden;
+    display:inline-block; vertical-align:middle; margin-bottom:26px;
+    --app-icon-mask: url('data:image/svg+xml,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xml%3Aspace%3D%22preserve%22%20viewBox%3D%220%200%20230.5%20230.5%22%3E%0A%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20stroke-linejoin%3D%22round%22%20stroke-miterlimit%3D%221.4%22%20clip-rule%3D%22evenodd%22%20d%3D%22M158.2%20230H64.1a320%20320%200%200%201-7-.1c-5%200-10-.5-15-1.3a50.8%2050.8%200%200%201-14.4-4.8%2048.2%2048.2%200%200%201-21-21%2050.9%2050.9%200%200%201-4.8-14.4%20100.7%20100.7%200%200%201-1.3-15v-7l-.1-8.2V64.1a320%20320%200%200%201%20.1-7c0-5%20.5-10%201.3-15a50.7%2050.7%200%200%201%204.8-14.4%2048.2%2048.2%200%200%201%2021-21%2051%2051%200%200%201%2014.4-4.8c5-.8%2010-1.2%2015-1.3a320%20320%200%200%201%207%200l8.2-.1h94.1a320%20320%200%200%201%207%20.1c5%200%2010%20.5%2015%201.3a52%2052%200%200%201%2014.4%204.8%2048.2%2048.2%200%200%201%2021%2021%2050.9%2050.9%200%200%201%204.8%2014.4c.8%205%201.2%2010%201.3%2015a320%20320%200%200%201%20.1%207v102.3l-.1%207c0%205-.5%2010-1.3%2015a50.7%2050.7%200%200%201-4.8%2014.4%2048.2%2048.2%200%200%201-21%2021%2050.8%2050.8%200%200%201-14.4%204.8c-5%20.8-10%201.2-15%201.3a320%20320%200%200%201-7%200l-8.2.1z%22%2F%3E%0A%3C%2Fsvg%3E%0A');
+    filter:drop-shadow(0 18px 42px rgba(0,0,0,.55));
   }
-  .words{display:flex; flex-direction:column; align-items:center; max-width:660px}
+  .appicon img{width:100%;height:100%;object-fit:contain;
+    mask-image:var(--app-icon-mask); -webkit-mask-image:var(--app-icon-mask)}
+  .appicon svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
 
   h1{
-    font-family:"Playfair Display", Georgia, "Times New Roman", serif;
-    font-weight:400; letter-spacing:.01em;
-    font-size:clamp(44px,9vw,72px); line-height:1.12;
-    text-shadow:0 2px 24px rgba(0,0,0,.35);
+    font-family:"Playfair Display", Georgia, serif; font-weight:400;
+    font-size:clamp(42px,8.5vw,74px); line-height:1.08; letter-spacing:.01em;
+    text-shadow:0 2px 26px rgba(0,0,0,.45); text-wrap:balance;
   }
   .nz{
-    font-family:"Playfair Display", Georgia, serif; font-weight:400;
-    font-size:clamp(20px,3.6vw,28px); letter-spacing:.06em;
-    color:var(--dim); margin-top:10px;
-    text-shadow:0 1px 16px rgba(0,0,0,.35);
+    font-family:"Playfair Display", Georgia, serif;
+    font-size:clamp(19px,3.4vw,27px); letter-spacing:.07em;
+    color:var(--dim); margin-top:8px; text-shadow:0 1px 18px rgba(0,0,0,.45);
   }
-  .launch{margin-top:22px; font-size:clamp(15px,2.6vw,18px); font-weight:600;
-          letter-spacing:.14em; text-transform:uppercase; color:var(--ink)}
-  .tagline{font-size:clamp(16px,3vw,20px); margin:22px 0 8px; font-weight:500;
-           text-shadow:0 1px 12px rgba(0,0,0,.4)}
-  .support{color:var(--dim); font-size:clamp(13.5px,2.5vw,15.5px); max-width:36em;
-           text-shadow:0 1px 10px rgba(0,0,0,.4)}
+  .tagline{
+    font-size:clamp(17px,3vw,21px); font-weight:500; margin:26px auto 0; max-width:22em;
+    text-shadow:0 1px 14px rgba(0,0,0,.5);
+  }
+  .support{
+    color:var(--dim); font-size:clamp(14px,2.5vw,16px); max-width:38em;
+    margin:14px auto 0; text-shadow:0 1px 10px rgba(0,0,0,.5);
+  }
 
-  /* ---------- the app, in a phone ---------- */
+  .badge{display:inline-block; margin:32px 0 10px; line-height:0}
+  .badge img{width:220px;height:auto;object-fit:contain}
+  .badge:focus-visible{outline:3px solid var(--accent);outline-offset:5px;border-radius:10px}
+  .availability{color:var(--dimmer);font-size:13px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .availability b{color:var(--ink);font-weight:600}
+
+  /* ---------- stat band ---------- */
+  .stats{background:var(--deeper); border-block:1px solid var(--line); padding:34px 0}
+  .stats .grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px 14px;
+  }
+  .stat b{
+    display:block; font-family:"Playfair Display",Georgia,serif; font-weight:500;
+    font-size:clamp(26px,5vw,38px); color:var(--accent); line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat span{display:block;color:var(--dimmer);font-size:12.5px;margin-top:7px;line-height:1.35}
+  @media (min-width:820px){ .stats .grid{grid-template-columns:repeat(6,1fr)} }
+
+  /* ---------- sections ---------- */
+  section{padding:70px 0}
+  h2{
+    font-family:"Playfair Display",Georgia,serif; font-weight:400;
+    font-size:clamp(27px,4.6vw,40px); line-height:1.15; text-wrap:balance;
+  }
+  .lede{color:var(--dim); font-size:15.5px; max-width:36em; margin:14px auto 0}
+  .eyebrow{
+    font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:12px;
+  }
+
+  /* ---------- screens ---------- */
+  .screens{display:flex; flex-wrap:wrap; gap:34px; justify-content:center; margin-top:44px}
+  .shot{flex:0 0 auto; width:min(230px,64vw); display:flex; flex-direction:column; align-items:center}
   .device{
-    position:relative; flex:0 0 auto;
-    width:min(226px,41vw);
-    background:#10171b; border-radius:42px; padding:10px;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,.10),
-      0 30px 70px rgba(0,0,0,.55),
-      0 2px 8px rgba(0,0,0,.35);
+    width:100%; background:#10171b; border-radius:42px; padding:9px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.10), 0 30px 70px rgba(0,0,0,.55);
     animation:float 7s ease-in-out infinite;
   }
-  .device--back{
-    animation-delay:-3.5s;
-  }
-  .device .screen{
-    width:100%; aspect-ratio:540/1174; border-radius:33px;
-    overflow:hidden; background:#0a2430;
-  }
-  .device .screen img{width:100%; height:100%; object-fit:cover; display:block}
-  .app-shot{display:flex; flex-direction:column; align-items:center; flex:0 0 auto}
-  .shots{display:flex; align-items:flex-start; justify-content:center; gap:clamp(10px,2.4vw,20px)}
-  .device--back{margin-top:clamp(20px,5vw,44px)}
-  .app-shot figcaption{
-    margin-top:18px; color:var(--dimmer); font-size:12px; letter-spacing:.02em;
-    text-shadow:0 1px 8px rgba(0,0,0,.5); max-width:26em; text-align:center;
-  }
-  @keyframes float{0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)}}
-  @media (prefers-reduced-motion:reduce){ .device{animation:none} }
+  .shot:nth-child(2) .device{animation-delay:-2.3s}
+  .shot:nth-child(3) .device{animation-delay:-4.6s}
+  .device .screen{width:100%; aspect-ratio:603/1311; border-radius:34px; overflow:hidden; background:var(--deep)}
+  .device .screen img{width:100%;height:100%;object-fit:cover;display:block}
+  .shot figcaption{margin-top:16px;color:var(--dimmer);font-size:12.5px;max-width:22em;line-height:1.45}
+  .shot figcaption b{display:block;color:var(--ink);font-size:13.5px;font-weight:600;margin-bottom:3px}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @media (prefers-reduced-motion:reduce){.device{animation:none}}
 
-  .count{display:flex; gap:12px; justify-content:center; margin:30px 0 4px}
-  .count div{background:rgba(8,30,40,.55); backdrop-filter:blur(6px);
-             border:1px solid rgba(255,255,255,.14); border-radius:14px;
-             padding:11px 0; width:76px}
-  .count b{display:block; font-size:25px; font-weight:700}
-  .count span{font-size:10px; color:var(--dimmer); letter-spacing:.14em;
-              text-transform:uppercase}
-  form{margin:30px 0 6px; display:flex; gap:10px; width:100%; max-width:440px}
+  /* ---------- free promise ---------- */
+  .promise{background:var(--deeper); border-block:1px solid var(--line)}
+  .promise .box{
+    max-width:760px; margin:34px auto 0; background:var(--panel);
+    border:1px solid var(--line); border-radius:20px; padding:28px 26px; text-align:left;
+  }
+  .promise ul{list-style:none; display:grid; grid-template-columns:1fr; gap:10px; margin-top:6px}
+  @media (min-width:640px){ .promise ul{grid-template-columns:1fr 1fr; gap:10px 26px} }
+  .promise li{color:var(--dim); font-size:14.5px; padding-left:24px; position:relative}
+  .promise li::before{
+    content:"✓"; position:absolute; left:0; color:var(--accent); font-weight:700;
+  }
+  .promise .kicker{color:var(--ink);font-size:15.5px;font-weight:600;margin-bottom:14px}
+
+  /* ---------- tiers ---------- */
+  .tiers{display:grid; grid-template-columns:1fr; gap:16px; margin-top:40px; text-align:left}
+  @media (min-width:860px){ .tiers{grid-template-columns:repeat(3,1fr)} }
+  .tier{
+    background:var(--panel); border:1px solid var(--line); border-radius:20px;
+    padding:26px 24px 28px; display:flex; flex-direction:column;
+  }
+  .tier--top{border-color:rgba(79,209,224,.45); box-shadow:0 0 0 1px rgba(79,209,224,.16)}
+  .tier .name{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .tier .who{color:var(--dim); font-size:13.5px; margin:10px 0 16px; min-height:2.8em}
+  .tier ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .tier li{color:var(--dim);font-size:14px;padding-left:20px;position:relative;line-height:1.45}
+  .tier li::before{content:"—";position:absolute;left:0;color:var(--dimmer)}
+  .tier .price{
+    margin-top:20px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:13.5px; color:var(--dimmer);
+  }
+  .tier .price b{
+    display:block; font-family:"Playfair Display",Georgia,serif; font-weight:500;
+    font-size:25px; color:var(--ink); line-height:1.2; margin-bottom:3px;
+  }
+  .terms{color:var(--dimmer);font-size:12.5px;max-width:46em;margin:26px auto 0;line-height:1.6}
+
+  /* ---------- credibility ---------- */
+  .trust{background:var(--deeper); border-block:1px solid var(--line)}
+  .trust .grid{display:grid;grid-template-columns:1fr;gap:22px;margin-top:38px;text-align:left}
+  @media (min-width:760px){ .trust .grid{grid-template-columns:1fr 1fr; gap:26px 40px} }
+  .trust h3{font-size:15px;font-weight:700;margin-bottom:6px}
+  .trust p{color:var(--dim);font-size:14.5px}
+
+  /* ---------- signup ---------- */
+  form{margin:28px auto 8px;display:flex;gap:10px;width:100%;max-width:440px}
   input[type=email]{
-    flex:1; background:rgba(8,30,40,.55); backdrop-filter:blur(6px);
-    border:1px solid rgba(255,255,255,.22); color:var(--ink);
-    border-radius:12px; padding:13px 16px; font-size:15.5px; min-width:0;
+    flex:1; background:var(--panel); border:1px solid rgba(255,255,255,.22);
+    color:var(--ink); border-radius:12px; padding:13px 15px; font-size:15.5px;
   }
   input[type=email]::placeholder{color:var(--dimmer)}
+  input[type=email]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   button{
-    background:var(--ink); color:#0a2430; border:0; border-radius:12px;
-    padding:13px 22px; font-size:15.5px; font-weight:700; cursor:pointer;
-    white-space:nowrap;
+    background:var(--ink);color:var(--deep);border:0;border-radius:12px;
+    padding:13px 22px;font-size:15.5px;font-weight:700;cursor:pointer;white-space:nowrap;
   }
-  button:hover{filter:brightness(.95)}
-  .reassure{color:var(--dimmer); font-size:12.5px; text-shadow:0 1px 8px rgba(0,0,0,.5)}
-  .thanks{color:var(--ink); font-size:14.5px; display:none; margin-top:6px;
-          text-shadow:0 1px 8px rgba(0,0,0,.5)}
-  .strip{display:flex; flex-wrap:wrap; gap:8px 10px; justify-content:center;
-         margin-top:38px; max-width:580px}
-  .strip span{
-    background:rgba(8,30,40,.5); backdrop-filter:blur(6px);
-    border:1px solid rgba(255,255,255,.12);
-    color:var(--dim); border-radius:999px; font-size:12.5px; padding:7px 14px;
-  }
-  footer{padding:24px 0 30px; color:var(--dimmer); font-size:12px; text-align:center;
-         text-shadow:0 1px 8px rgba(0,0,0,.5)}
-  footer a{color:var(--dimmer)}
+  button:hover{filter:brightness(.94)}
+  button:disabled{opacity:.6;cursor:default}
+  .reassure{color:var(--dimmer);font-size:12.5px}
+  .thanks{display:none;color:var(--ink);font-size:14.5px;margin-top:6px}
+  @media (max-width:480px){ form{flex-direction:column} }
 
-  /* Side by side once there's room for it */
-  @media (min-width:900px){
-    .split{flex-direction:row; align-items:center; justify-content:center; gap:64px}
-    .words{align-items:flex-start; text-align:left; flex:1 1 0; max-width:560px}
-    .words .support{margin-left:0}
-    .count{justify-content:flex-start}
-    form{margin-left:0}
-    h1, .nz, .launch, .tagline, .support, .reassure, .thanks{text-align:left}
-  }
-  @media (max-width:480px){
-    form{flex-direction:column}
-    .count div{width:64px}
-  }
+  footer{padding:42px 0 52px;color:var(--dimmer);font-size:12.5px;line-height:1.65}
+  footer .wrap > p{max-width:44em;margin:0 auto 10px}
+  footer a{color:var(--dimmer)}
 </style>
 </head>
 <body>
-<main>
-  <div class="split">
 
-    <div class="words">
-      <h1>Freshwater<br>Fishing</h1>
-      <div class="nz">New Zealand</div>
-      <div class="launch">Coming 1 September</div>
-      <p class="tagline">Know where to fish, when to go, and what to tie on — across the South Island.</p>
-      <p class="support">A freshwater fishing companion for the South Island, starting with Southland
-         and Otago. Live flow and weather, a science-based hatch and fly guide, official Fish &amp;
-         Game regulations, and access maps — in one iOS app.</p>
-      <div class="count" id="count" aria-label="Countdown to launch">
-        <div><b id="cd">–</b><span>days</span></div>
-        <div><b id="ch">–</b><span>hours</span></div>
-        <div><b id="cm">–</b><span>mins</span></div>
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+
+    <!-- Apple-supplied app icon embed. Do not restyle the mask or stroke. -->
+    <a class="appicon" href="https://apps.apple.com/nz/app/freshwater-fishing-nz/id6789827411?itscg=30200&itsct=apps_box_artwork&mttnsubad=6789827411" aria-label="Freshwater Fishing NZ on the App Store">
+      <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/52/7f/88/527f8802-55d6-d0f0-aa20-f9ba2a719927/AppIcon-0-0-1x_U007ephone-0-1-P3-85-220.png/540x540bb.jpg" alt="Freshwater Fishing NZ app icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230.5 230.5" aria-hidden="true">
+        <path fill="none" stroke="#000" stroke-linejoin="round" stroke-miterlimit="1.4" stroke-opacity=".1" stroke-width="1" d="M158.2 230H64.1a320 320 0 0 1-7-.1c-5 0-10-.5-15-1.3a50.8 50.8 0 0 1-14.4-4.8 48.2 48.2 0 0 1-21-21 50.9 50.9 0 0 1-4.8-14.4 100.7 100.7 0 0 1-1.3-15v-7l-.1-8.2V64.1a320 320 0 0 1 .1-7c0-5 .5-10 1.3-15a50.7 50.7 0 0 1 4.8-14.4 48.2 48.2 0 0 1 21-21 51 51 0 0 1 14.4-4.8c5-.8 10-1.2 15-1.3a320 320 0 0 1 7 0l8.2-.1h94.1a320 320 0 0 1 7 .1c5 0 10 .5 15 1.3a52 52 0 0 1 14.4 4.8 48.2 48.2 0 0 1 21 21 50.9 50.9 0 0 1 4.8 14.4c.8 5 1.2 10 1.3 15a320 320 0 0 1 .1 7v102.3l-.1 7c0 5-.5 10-1.3 15a50.7 50.7 0 0 1-4.8 14.4 48.2 48.2 0 0 1-21 21 50.8 50.8 0 0 1-14.4 4.8c-5 .8-10 1.2-15 1.3a320 320 0 0 1-7 0l-8.2.1z" clip-rule="evenodd" vector-effect="non-scaling-stroke"/>
+      </svg>
+    </a>
+
+    <h1>Freshwater<br>Fishing</h1>
+    <div class="nz">New Zealand</div>
+
+    <p class="tagline">Live flow, fishability and the hatch — across Southland &amp; Otago.</p>
+    <p class="support">It reads every river and lake in the region in real time and tells you, in plain
+       English, whether it's worth going today — and where. The regulations, access maps and safety
+       information are free, for everyone.</p>
+
+    <!-- App Store badge. White artwork, because the page is dark — Apple's guidelines
+         require the badge to contrast with its background. Link params unchanged. -->
+    <a class="badge" href="https://apps.apple.com/nz/app/freshwater-fishing-nz/id6789827411?itscg=30200&itsct=apps_box_badge&mttnsubad=6789827411">
+      <img src="assets/white.svg" alt="Download on the App Store" width="220" height="73">
+    </a>
+
+    <p class="availability" id="availability">Free to download · iPhone · Southland &amp; Otago</p>
+  </div>
+</header>
+
+<!-- ============ STATS ============ -->
+<div class="stats">
+  <div class="wrap grid">
+    <div class="stat"><b>180+</b><span>named waters</span></div>
+    <div class="stat"><b>74</b><span>live gauges read in real time</span></div>
+    <div class="stat"><b>110</b><span>official regulation entries</span></div>
+    <div class="stat"><b>626</b><span>public access features</span></div>
+    <div class="stat"><b>19</b><span>researched insect hatches</span></div>
+    <div class="stat"><b>18</b><span>fish species profiled</span></div>
+  </div>
+</div>
+
+<!-- ============ SCREENS ============ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">In the app</div>
+    <h2>A gauge reading is a number.<br>You need an answer.</h2>
+    <p class="lede">One engine feeds the reach page, the widget, Siri, alerts and Best Waters — so they
+       can never disagree with each other.</p>
+
+    <div class="screens">
+      <figure class="shot">
+        <div class="device"><div class="screen">
+          <img src="assets/screen-splash.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The app's opening screen: the title Freshwater Fishing New Zealand over a turquoise back-country river.">
+        </div></div>
+        <figcaption><b>Southland &amp; Otago</b>Every river, lake and dam in the two regions, on one map.</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="device"><div class="screen">
+          <img src="assets/screen-dunstan.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="Lake Dunstan at Cromwell reading 194.20 m and dropping, marked Open all year with good conditions, and the advice: light north-west wind 11 km/h, work the edges, drop-offs and stream mouths.">
+        </div></div>
+        <figcaption><b>Lakes read from the wind</b>Stillwater has no flow to band, so the verdict runs off wind, light, season and water temperature.</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="device"><div class="screen">
+          <img src="assets/screen-waikaia.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The Waikaia River at Piano Flat: a live Environment Southland river camera showing a frosty morning, an access map, and a fourteen-day flow chart ranging 6.0 to 110.2 cumecs against an annual median of 8.4.">
+        </div></div>
+        <figcaption><b>The last fortnight, in context</b>Live camera, access map, and today's flow against this river's own long-term median.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FREE PROMISE ============ -->
+<section class="promise">
+  <div class="wrap">
+    <div class="eyebrow">The promise</div>
+    <h2>Everything you need to fish<br>legally and safely is free.</h2>
+    <p class="lede">The paid tiers add intelligence and tools on top. They never add access to the rules
+       themselves.</p>
+
+    <div class="box">
+      <p class="kicker">Free, for every angler — licensed or just curious:</p>
+      <ul>
+        <li>The complete official regulations, per water</li>
+        <li>Offline-capable access maps and beats</li>
+        <li>Live flow, level, trend and a fortnight chart</li>
+        <li>Fish &amp; Game access, parking and warnings</li>
+        <li>River safety — the Water Safety Code</li>
+        <li>Check Clean Dry &amp; the Fiordland Clean Gear Certificate</li>
+        <li>Whitebaiting rules</li>
+        <li>Mātaitai reserves and native fish</li>
+        <li>Automatic season switch on 1 October</li>
+        <li>Home-screen widget and Siri</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIERS ============ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">Three ways in</div>
+    <h2>Free tells you the rules.<br>Paid tells you when to go.</h2>
+
+    <div class="tiers">
+
+      <div class="tier">
+        <div class="name">Free</div>
+        <p class="who">Every angler — licensed or just curious.</p>
+        <ul>
+          <li>Official regulations for Southland &amp; Otago</li>
+          <li>Access maps, beats, parking and warnings</li>
+          <li>Live flow and level for every gauged water</li>
+          <li>Safety, biosecurity and whitebait rules</li>
+          <li>Mātaitai reserves and native fish</li>
+          <li>Widget and Siri</li>
+        </ul>
+        <p class="price"><b>$0</b>No account required.</p>
       </div>
-      <form id="notify" action="https://formspree.io/f/xwvdjnwp" method="POST">
-        <input type="email" name="email" placeholder="you@example.com" required
-               autocomplete="email" aria-label="Email address">
-        <button type="submit">Notify me at launch</button>
-      </form>
-      <div class="reassure">We'll only email you about the launch. No spam.</div>
-      <div class="thanks" id="thanks">Thanks — you're on the list. See you on the water in September.</div>
+
+      <div class="tier">
+        <div class="name">Premium</div>
+        <p class="who">The keen recreational angler.</p>
+        <ul>
+          <li>The fishability verdict — is it worth going, right now</li>
+          <li>Live conditions, rain and the 7-day forecast</li>
+          <li>Hatch guide and fly recommender</li>
+          <li>One-tap photo catch log, auto-tagged with conditions</li>
+          <li>Insights, favourite spots and trip planning</li>
+        </ul>
+        <p class="price"><b>Annual subscription</b>3-day free trial. Current price shown in the App Store.</p>
+      </div>
+
+      <div class="tier tier--top">
+        <div class="name">Guide</div>
+        <p class="who">Professional guides, and the most serious anglers.</p>
+        <ul>
+          <li>Everything in Premium</li>
+          <li>Best waters near you — today and tomorrow, rated for fly, spinner or bait</li>
+          <li>Fishing-window alerts — told when a river comes into the conditions you fish</li>
+          <li>Bite window — feeding forecast from pressure, moon and your own catch log</li>
+          <li>Advanced analytics across your whole season</li>
+          <li>Client book, bookings diary and branded PDF trip reports</li>
+        </ul>
+        <p class="price"><b>Annual subscription</b>3-day free trial. Current price shown in the App Store.</p>
+      </div>
+
     </div>
 
-    <figure class="app-shot">
-      <div class="shots">
-        <div class="device">
-          <div class="screen">
-            <img src="screen-hawea.jpg" width="540" height="1174" loading="lazy" decoding="async" alt="The Hāwea River screen: 189.5 cumecs, holding steady, flagged &quot;Blown out — too high and coloured to fish well&quot;, with brown and rainbow trout listed and a 14-day flow chart below.">
-          </div>
-        </div>
-        <div class="device device--back">
-          <div class="screen">
-            <img src="screen-alerts.jpg" width="540" height="1174" loading="lazy" decoding="async" alt="Fishing-window alerts switched on for Piano Flat, a &quot;Best waters near you&quot; card with a 65 km search distance, and an &quot;On the water now&quot; hatch card.">
-          </div>
-        </div>
+    <p class="terms">Premium and Guide are annual subscriptions with a 3-day free trial, billed through
+       the App Store and renewing automatically unless cancelled. Manage or cancel any time in your
+       Apple ID settings; cancel before the trial ends and you won't be charged. Prices are shown in the
+       App Store and in the app at the time of purchase.</p>
+  </div>
+</section>
+
+<!-- ============ CREDIBILITY ============ -->
+<section class="trust">
+  <div class="wrap">
+    <div class="eyebrow">How it decides</div>
+    <h2>An explainable engine.<br>No AI hand-waving.</h2>
+    <p class="lede">Grounded in official gauge data and each river's own long-term record — honest about
+       the weather, and honest when it doesn't know.</p>
+
+    <div class="grid">
+      <div>
+        <h3>It never invents data</h3>
+        <p>Where a water has no calibrated flow history, it shows the live reading only and says so,
+           rather than guessing a rating.</p>
       </div>
-      <figcaption>Live conditions and a fishability read for each water — plus alerts when your river comes right</figcaption>
-    </figure>
-
+      <div>
+        <h3>It's honest about weather</h3>
+        <p>A perfect flow on a snowing, gale-blown day is reported as a hard day — not "get out there".
+           It always takes the worse of the two.</p>
+      </div>
+      <div>
+        <h3>The rules are the official rules</h3>
+        <p>Transcribed verbatim from the Fish &amp; Game Anglers Notice, date-gated to switch seasons
+           automatically, with the official notice named as the sole legal authority.</p>
+      </div>
+      <div>
+        <h3>Colour is never the only signal</h3>
+        <p>Every rating pairs its traffic-light colour with an icon and words, so it reads for
+           colour-blind anglers.</p>
+      </div>
+      <div>
+        <h3>It respects the taonga</h3>
+        <p>Mātaitai reserve and native-fish content is sourced from rūnanga-sanctioned and DOC material,
+           and is never paywalled.</p>
+      </div>
+      <div>
+        <h3>The science is real</h3>
+        <p>The cicada temperature model and willow-grub degree-day model were suggested by Fish &amp; Game
+           Southland and built on published New Zealand entomology — Heath, Heath &amp; Sanborn (2022) and
+           Charles &amp; Allan (2000) — and are credited in the app.</p>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div class="strip">
-    <span>Live river flow &amp; weather</span>
-    <span>Fishability read for each water</span>
-    <span>Science-based hatch &amp; fly guide</span>
-    <span>Official Fish &amp; Game regulations</span>
-    <span>Access maps &amp; river cameras</span>
+<!-- ============ REGIONS ============ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">What's next</div>
+    <h2>More water, coming</h2>
+    <p class="lede">We started with Southland and Otago because that's where the regulation data and the
+       flow gauges run deepest. Leave your email and we'll let you know as new areas are added.</p>
+
+    <!-- ⚠️ PASTE YOUR EXISTING FORMSPREE ENDPOINT into action="" below. -->
+    <form id="notify" action="FORMSPREE_ENDPOINT_HERE" method="POST">
+      <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Email address">
+      <button type="submit">Notify me</button>
+    </form>
+    <p class="reassure">Only when a new area goes live. Nothing else.</p>
+    <p class="thanks" id="thanks">Thanks — we'll let you know.</p>
   </div>
-</main>
+</section>
+
 <footer>
-  © 2026 Freshwater Fishing NZ · <a href="/privacy.html">Privacy</a><br>
-  Caples River, South Island · Photograph © Dave Loader, used with thanks
-  <!-- At launch: add the App Store badge/link here -->
+  <div class="wrap">
+    <p>The 2026/27 Anglers Notice takes effect on 1 October 2026. Until then the app shows the 2025/26
+       rules and switches over automatically. The official Anglers Notice is always the legal authority.</p>
+    <p>Flow data: Environment Southland and Otago Regional Council — provisional.</p>
+    <p>Caples River, South Island · Photograph © Dave Loader, used with thanks</p>
+    <p>© 2026 Freshwater Fishing NZ · <a href="/privacy">Privacy</a></p>
+  </div>
 </footer>
+
 <script>
-  // Countdown to 1 September 2026, NZ time (NZST, UTC+12)
-  const target = new Date("2026-09-01T00:00:00+12:00");
-  function tick(){
-    let s = Math.max(0, (target - Date.now()) / 1000);
-    document.getElementById("cd").textContent = Math.floor(s/86400);
-    document.getElementById("ch").textContent = Math.floor(s%86400/3600);
-    document.getElementById("cm").textContent = Math.floor(s%3600/60);
-  }
-  tick(); setInterval(tick, 30000);
-  // AJAX submit — thank-you shows ONLY after Formspree confirms storage.
-  document.getElementById("notify").addEventListener("submit", async function(e){
+  // Availability line: before 1 Sept 2026 NZST it notes the official launch date;
+  // after, it just says it's out. The download button is always live, because the
+  // app is already on the App Store.
+  (function () {
+    var launch = new Date("2026-09-01T00:00:00+12:00");
+    var el = document.getElementById("availability");
+    if (Date.now() < launch) {
+      el.innerHTML = 'Free to download · iPhone · Southland &amp; Otago — <b>official launch 1 September</b>';
+    }
+  })();
+
+  // Region signup. Thank-you shows only after Formspree confirms storage.
+  document.getElementById("notify").addEventListener("submit", async function (e) {
     e.preventDefault();
-    const btn = this.querySelector("button");
+    var btn = this.querySelector("button");
+    var original = btn.textContent;
     btn.disabled = true; btn.textContent = "Adding you…";
     try {
-      const r = await fetch(this.action, {
+      var r = await fetch(this.action, {
         method: "POST",
         headers: { "Accept": "application/json" },
         body: new FormData(this)
       });
-      if (!r.ok) throw new Error(r.status);
+      if (!r.ok) throw new Error("Signup failed");
       this.style.display = "none";
       document.querySelector(".reassure").style.display = "none";
       document.getElementById("thanks").style.display = "block";
-    } catch(err) {
-      btn.disabled = false; btn.textContent = "Notify me at launch";
-      alert("Sorry — that didn't go through. Please try again.");
+    } catch (err) {
+      btn.disabled = false; btn.textContent = original;
+      alert("That didn't save — please try again, or email hello@freshwaterfishingnz.com.");
     }
   });
 </script>
+
 </body>
 </html>
