@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Freshwater Fishing NZ — live flow, fishability and the hatch</title>
-<meta name="description" content="Reads every river and lake in Southland and Otago in real time and tells you, in plain English, whether it's worth going today. Regulations, access maps and safety are free. iPhone.">
+<meta name="description" content="Reads 74 live river and lake gauges across Southland and Otago and tells you, in plain English, whether it's worth going today. Regulations, access maps and safety are free. iPhone.">
 
 <link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -115,21 +115,95 @@
   }
 
   /* ---------- screens ---------- */
-  .screens{display:flex; flex-wrap:wrap; gap:34px; justify-content:center; margin-top:44px}
-  .shot{flex:0 0 auto; width:min(230px,64vw); display:flex; flex-direction:column; align-items:center}
+  .screens{
+    display:flex; flex-wrap:wrap; gap:44px 40px; justify-content:center; margin-top:56px;
+    perspective:1150px; perspective-origin:50% 42%;
+  }
+  .shot{flex:0 0 auto; width:min(300px,76vw); display:flex; flex-direction:column; align-items:center}
+
+  /* A real three-quarter view: the far edge turns away, the near edge comes
+     forward. --ry carries the angle so one keyframe set serves both phones,
+     and --sx throws the shadow away from the near edge. */
   .device{
-    width:100%; background:#10171b; border-radius:42px; padding:9px;
-    box-shadow:0 0 0 1px rgba(255,255,255,.10), 0 30px 70px rgba(0,0,0,.55);
+    --ry:34deg; --rx:4deg; --rz:-1.5deg; --sx:38px;
+    position:relative;
+    width:100%; background:#0d1418; border-radius:48px; padding:11px;
+    transform-style:preserve-3d;
+    transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz));
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.13),
+      0 0 0 2px rgba(0,0,0,.5),
+      var(--sx) 46px 90px rgba(0,0,0,.62),
+      calc(var(--sx) / 3) 14px 30px rgba(0,0,0,.45);
     animation:float 7s ease-in-out infinite;
   }
-  .shot:nth-child(2) .device{animation-delay:-2.3s}
-  .shot:nth-child(3) .device{animation-delay:-4.6s}
-  .device .screen{width:100%; aspect-ratio:603/1311; border-radius:34px; overflow:hidden; background:var(--deep)}
-  .device .screen img{width:100%;height:100%;object-fit:cover;display:block}
-  .shot figcaption{margin-top:16px;color:var(--dimmer);font-size:12.5px;max-width:22em;line-height:1.45}
+  .shot:nth-child(2) .device{--ry:-34deg; --rz:1.5deg; --sx:-38px; animation-delay:-3.5s}
+
+  /* Rim light down the edge nearest the viewer — the cue that sells the turn. */
+  .device::before{
+    content:""; position:absolute; top:5%; bottom:5%; width:3px; border-radius:3px;
+    left:-1px; background:linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.5) 22%,
+      rgba(255,255,255,.5) 78%, rgba(255,255,255,0));
+    pointer-events:none;
+  }
+  .shot:nth-child(2) .device::before{left:auto; right:-1px}
+
+  .device .screen{
+    position:relative; width:100%; aspect-ratio:603/1311;
+    border-radius:38px; overflow:hidden; background:var(--deep);
+  }
+  /* Glass falling off towards the far edge. Kept faint so the screen stays legible. */
+  .device .screen::after{
+    content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:linear-gradient(100deg,
+      rgba(255,255,255,.11) 0%, rgba(255,255,255,.03) 26%,
+      rgba(0,0,0,0) 55%, rgba(0,0,0,.20) 100%);
+  }
+  .shot:nth-child(2) .screen::after{
+    background:linear-gradient(260deg,
+      rgba(255,255,255,.11) 0%, rgba(255,255,255,.03) 26%,
+      rgba(0,0,0,0) 55%, rgba(0,0,0,.20) 100%);
+  }
+  /* Two screens per phone, cross-fading. The first sits underneath and is
+     always painted; the second fades in over it and back out. */
+  .device .screen img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block;
+  }
+  .device .screen img + img{animation:xfade 14s ease-in-out infinite}
+  .shot:nth-child(2) .screen img + img{animation-delay:-7s}
+  .shot figcaption{margin-top:18px;color:var(--dimmer);font-size:12.5px;max-width:24em;line-height:1.45}
   .shot figcaption b{display:block;color:var(--ink);font-size:13.5px;font-weight:600;margin-bottom:3px}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  @media (prefers-reduced-motion:reduce){.device{animation:none}}
+  /* The rotation is carried in the keyframes too, or the animation would flatten it.
+     --ry / --rx hold the angle, so one keyframe set serves both phones. */
+  @keyframes float{
+    0%,100%{transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz)) translateY(0)}
+    50%    {transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz)) translateY(-11px)}
+  }
+  @keyframes xfade{
+    0%, 42%   {opacity:0}
+    50%, 92%  {opacity:1}
+    100%      {opacity:0}
+  }
+  /* Narrower screens: ease the turn so the far edge doesn't crush, and drop the
+     shadow throw. Below 560px they sit square on — a hard angle on a phone reads
+     as a rendering fault rather than a choice. */
+  @media (max-width:900px){
+    .screens{perspective:1400px; gap:40px 28px}
+    .device{--ry:22deg; --rx:3deg; --sx:26px}
+    .shot:nth-child(2) .device{--ry:-22deg; --sx:-26px}
+  }
+  @media (max-width:560px){
+    .screens{gap:38px}
+    .device{--ry:0deg; --rx:0deg; --rz:0deg; --sx:0px}
+    .shot:nth-child(2) .device{--ry:0deg; --rz:0deg; --sx:0px}
+    .device::before{display:none}
+    .device .screen::after{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .device{animation:none}
+    .device .screen img + img{animation:none; opacity:0}
+  }
 
   /* ---------- free promise ---------- */
   .promise{background:var(--deeper); border-block:1px solid var(--line)}
@@ -220,9 +294,10 @@
     <div class="nz">New Zealand</div>
 
     <p class="tagline">Live flow, fishability and the hatch — across Southland &amp; Otago.</p>
-    <p class="support">It reads every river and lake in the region in real time and tells you, in plain
-       English, whether it's worth going today — and where. The regulations, access maps and safety
-       information are free, for everyone.</p>
+    <p class="support">It reads 74 live river and lake gauges across the region, alongside the weather
+       and the hatch, and tells you in plain English whether it's worth going today — and where. Every
+       one of the 180-plus named waters carries its official rules and access, gauged or not. The
+       regulations, access maps and safety information are free, for everyone.</p>
 
     <!-- App Store badge. Apple's official white artwork, inlined so it can never 404.
          White because the page is dark — Apple requires the badge to contrast.
@@ -303,23 +378,18 @@
     <div class="screens">
       <figure class="shot">
         <div class="device"><div class="screen">
-          <img src="screen-splash.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The app's opening screen: the title Freshwater Fishing New Zealand over a turquoise back-country river.">
+          <img src="screen-hawea.jpg" width="540" height="1174" loading="lazy" decoding="async" alt="The H&#257;wea River screen: 189.5 cumecs, holding steady, flagged &quot;Blown out &#8212; too high and coloured to fish well&quot;, with brown and rainbow trout listed and a 14-day flow chart below.">
+          <img src="screen-waikaia.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The Waikaia River at Piano Flat: a live Environment Southland river camera showing a frosty morning, an access map, and a fourteen-day flow chart ranging 6.0 to 110.2 cumecs against an annual median of 8.4.">
         </div></div>
-        <figcaption><b>Southland &amp; Otago</b>Every river, lake and dam in the two regions, on one map.</figcaption>
+        <figcaption><b>Is it worth going?</b>The verdict puts today&#8217;s flow on this river&#8217;s own long-term curve &#8212; then gives you the last fortnight and a live camera to check it against.</figcaption>
       </figure>
 
       <figure class="shot">
         <div class="device"><div class="screen">
           <img src="screen-dunstan.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="Lake Dunstan at Cromwell reading 194.20 m and dropping, marked Open all year with good conditions, and the advice: light north-west wind 11 km/h, work the edges, drop-offs and stream mouths.">
+          <img src="screen-splash.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The app&#8217;s opening screen: the title Freshwater Fishing New Zealand over a turquoise back-country river.">
         </div></div>
-        <figcaption><b>Lakes read from the wind</b>Stillwater has no flow to band, so the verdict runs off wind, light, season and water temperature.</figcaption>
-      </figure>
-
-      <figure class="shot">
-        <div class="device"><div class="screen">
-          <img src="screen-waikaia.jpg" width="603" height="1311" loading="lazy" decoding="async" alt="The Waikaia River at Piano Flat: a live Environment Southland river camera showing a frosty morning, an access map, and a fourteen-day flow chart ranging 6.0 to 110.2 cumecs against an annual median of 8.4.">
-        </div></div>
-        <figcaption><b>The last fortnight, in context</b>Live camera, access map, and today's flow against this river's own long-term median.</figcaption>
+        <figcaption><b>Rivers, lakes and dams</b>Every named water in Southland and Otago &#8212; with stillwater read from wind, light and season rather than flow.</figcaption>
       </figure>
     </div>
   </div>
@@ -338,6 +408,7 @@
       <ul>
         <li>The complete official regulations, per water</li>
         <li>Offline-capable access maps and beats</li>
+        <li>Beat cards with Fish &amp; Game sign photos and directions</li>
         <li>Live flow, level, trend and a fortnight chart</li>
         <li>Fish &amp; Game access, parking and warnings</li>
         <li>River safety — the Water Safety Code</li>
@@ -380,6 +451,8 @@
           <li>The fishability verdict — is it worth going, right now</li>
           <li>Live conditions, rain and the 7-day forecast</li>
           <li>Hatch guide and fly recommender</li>
+          <li>Knows when the willow grub and cicada are on — New Zealand's two trickiest summer hatches,
+              predicted from live temperature, on the water's own page</li>
           <li>One-tap photo catch log, auto-tagged with conditions</li>
           <li>Insights, favourite spots and trip planning</li>
         </ul>
@@ -395,6 +468,7 @@
           <li>Best waters near you — today and tomorrow, rated for fly, spinner or bait</li>
           <li>Fishing-window alerts — told when a river comes into the conditions you fish</li>
           <li>Bite window — feeding forecast from pressure, moon and your own catch log</li>
+          <li>Set the method Best Waters opens on — fly, spinner, bait or best available</li>
           <li>Advanced analytics across your whole season</li>
           <li>Client book, bookings diary and branded PDF trip reports</li>
         </ul>
@@ -432,9 +506,20 @@
            It always takes the worse of the two.</p>
       </div>
       <div>
+        <h3>It keeps working when a gauge doesn't</h3>
+        <p>If a regional council's data portal goes down, the water's page doesn't blank out. You get a
+           plain "gauge unavailable" card, and the weather, access map, safety and rules — none of which
+           depend on the gauge — carry on as normal.</p>
+      </div>
+      <div>
         <h3>The rules are the official rules</h3>
         <p>Transcribed verbatim from the Fish &amp; Game Anglers Notice, date-gated to switch seasons
            automatically, with the official notice named as the sole legal authority.</p>
+      </div>
+      <div>
+        <h3>The hatch models know their season</h3>
+        <p>The predictive models only appear when the insect is actually about — cicada from November to
+           March, willow grub from December to March. No cicada advice on a warm spring morning.</p>
       </div>
       <div>
         <h3>Colour is never the only signal</h3>
@@ -448,9 +533,8 @@
       </div>
       <div>
         <h3>The science is real</h3>
-        <p>The cicada temperature model and willow-grub degree-day model were suggested by Fish &amp; Game
-           Southland and built on published New Zealand entomology — Heath, Heath &amp; Sanborn (2022) and
-           Charles &amp; Allan (2000) — and are credited in the app.</p>
+        <p>The cicada temperature model and willow-grub degree-day model were built on published New
+           Zealand entomology.</p>
       </div>
     </div>
   </div>
