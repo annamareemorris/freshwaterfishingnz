@@ -70,7 +70,9 @@
   .hero::before{
     content:""; position:absolute; inset:0; z-index:0;
     background:
-      linear-gradient(rgba(6,26,36,.42), rgba(6,26,36,.72) 70%, var(--deep)),
+      radial-gradient(ellipse 66% 62% at 50% 44%,
+        rgba(4,20,28,.50), rgba(4,20,28,.21) 62%, rgba(4,20,28,0) 100%),
+      linear-gradient(rgba(6,26,36,.06), rgba(6,26,36,.18) 72%, var(--deep)),
       url("caples-river-web.jpg") center 35% / cover no-repeat;
   }
   .hero > *{position:relative; z-index:1}
